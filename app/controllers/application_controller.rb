@@ -7,6 +7,8 @@ class ApplicationController < ActionController::API
 
   def current_user
     @user ||= User.find_by(id: decoded_token['user_id']) if decoded_token
+    p @user
+    @user
   end
 
   def logged_in?
@@ -14,7 +16,7 @@ class ApplicationController < ActionController::API
   end
 
   def authorized
-    render json: { message: 'You are not logged in.' }, status: :unauthorized unless logged_in?
+    render json: { message: 'You are not logged in. Auth' }, status: :unauthorized unless logged_in?
   end
 
   def render_record_invalid(invalid)
