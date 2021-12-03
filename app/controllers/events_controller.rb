@@ -12,8 +12,20 @@ class EventsController < ApplicationController
   end
 
   def create
-    event = Event.create!(event_params)
-    render json: event, status: :created
+    user = current_user
+    p user
+    p 'test'
+    if user
+      job = Job.find_by(id: params[:job_id])
+      if job.user_id == user.id
+        event = Event.create!(event_params)
+        render json: event, status: :created
+      else
+        render_not_logged_in # TODO: new error for unauthorized
+      end
+    else
+      render_not_logged_in
+    end
   end
 
   def update
@@ -31,7 +43,7 @@ class EventsController < ApplicationController
   private
 
   def event_params
-    params.permit(:title, :description, :date, :status, :job_id)
+    params.permit(:title, :description, :date, :job_id)
   end
 
 end

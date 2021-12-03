@@ -1,18 +1,25 @@
 class UsersController < ApplicationController
+  skip_before_action :authorized, only: [:create]
 
   def index
+    # TODO: remove, no need for all users to be visible
     users = User.all
     render json: users
   end
 
   def show
-    user = User.find(params[:id])
-    render json: user
+    user = current_user
+    if user
+      render json: user, status: :ok
+    else
+      render_not_logged_in
+    end
   end
 
   def create
     user = User.create!(user_params)
-    render json: user, status: :created
+    token = encode_token(user_id: user.id)
+    render json: {user: user, jwt: token}, status: :created
   end
 
   def update
@@ -30,6 +37,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.permit(:username)
+    params.permit(:username, :password, :password_confirmation)
   end
 end

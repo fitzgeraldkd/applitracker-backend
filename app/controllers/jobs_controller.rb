@@ -2,30 +2,53 @@ class JobsController < ApplicationController
 
   def index
     user = current_user
-    jobs = user.jobs
-    render json: jobs
+    if user
+      jobs = user.jobs
+      render json: jobs
+    else
+      render_not_logged_in
+    end
   end
 
-  def show
-    job = Job.find(params[:id])
-    render json: job
-  end
+  # TODO: determine if this is necessary
+  # def show
+  #   job = Job.find(params[:id])
+  #   render json: job
+  # end
 
   def create
-    job = Job.create!(job_params)
-    render json: job, status: :created
+    user = current_user
+    if user
+      job = user.jobs.create!(job_params)
+      render json: job, status: :created
+    else
+      render_not_logged_in
+    end
   end
 
   def update
-    job = Job.find(params[:id])
-    job.update!(job_params)
-    render json: job
+    user = current_user
+    if user
+      job = Job.find(params[:id])
+      job.update!(job_params)
+      render json: job
+    else
+      render_not_logged_in
+    end
   end
 
   def destroy
-    job = Job.find(params[:id])
-    job.destroy
-    render json: "Job deleted."
+    if current_user
+      job = Job.find(params[:id])
+      if job.user_id == current_user.id
+        job.destroy
+        render json: "Job deleted."
+      else
+        render_not_logged_in # TODO: new error for unauthorized
+      end
+    else
+      render_not_logged_in
+    end
   end
 
   private
