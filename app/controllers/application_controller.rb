@@ -8,6 +8,8 @@ class ApplicationController < ActionController::API
   def current_user
     @user ||= User.find_by(id: decoded_token['user_id']) if decoded_token
     p @user
+    p User.all.to_json
+    p "decoded token: #{decoded_token}" 
     @user
   end
 
