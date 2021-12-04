@@ -1,24 +1,36 @@
-# README
+# AppliTracker (Back-End)
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+[Click here](https://applitracker.netlify.app/) to see the deployed app.
 
-Things you may want to cover:
+[Click here](https://github.com/fitzgeraldkd/applitracker-frontend) to see the repository for the front-end. More information about this project will be available in that repository's README.
 
-* Ruby version
+## Installation (Local)
 
-* System dependencies
+To run this locally, you will need to run [PostgreSQL](https://www.postgresql.org/) on your local machine. Please follow the official instructions to get this installed.
 
-* Configuration
+After cloning this repository and getting PostgreSQL running, the first thing you should do is make sure all the required gems are installed. You can do this by running this command in your terminal:
 
-* Database creation
+```bash
+bundle install
+```
 
-* Database initialization
+Then create a `config/secrets.rb` file. This will allow you to define environment variables to connect to the database and generate JSON Web Tokens. The file is listed in the `.gitignore` to help prevent unintentionally sharing the contents of this file. The file should look like this:
 
-* How to run the test suite
+```rb
+# config/secrets.rb
+ENV['database'] = 'your database name here'
+ENV['password'] = 'your database password here'
+ENV['jwt_token'] = 'your secret to generate secure JSON Web Tokens'
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+Once these secret keys are defined, create the tables by running the following command in your terminal: 
 
-* Deployment instructions
+```bash
+rails db:migrate
+```
 
-* ...
+You can then run the server with:
+
+```bash
+rails s
+```

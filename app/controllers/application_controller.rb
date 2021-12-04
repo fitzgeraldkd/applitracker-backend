@@ -14,19 +14,19 @@ class ApplicationController < ActionController::API
   end
 
   def authorized
-    render json: { message: 'You are not logged in.' }, status: :unauthorized unless logged_in?
+    render json: { errors: ['You are not logged in.'] }, status: :unauthorized unless logged_in?
   end
 
   def render_record_invalid(invalid)
-    render json: invalid.record.errors.full_messages, status: :unprocessable_entity
+    render json: { errors: invalid.record.errors.full_messages }, status: :unprocessable_entity
   end
 
   def render_not_found(error)
-    render json: error, status: :not_found
+    render json: { errors: [error] }, status: :not_found
   end
 
   def render_not_logged_in
-    render json: { error: 'You are not logged in.' }, status: :unauthorized
+    render json: { errors: ['You are not logged in.'] }, status: :unauthorized
   end
 
   def encode_token(payload)

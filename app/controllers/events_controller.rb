@@ -16,7 +16,7 @@ class EventsController < ApplicationController
     p user
     p 'test'
     if user
-      job = Job.find_by(id: params[:job_id])
+      job = Job.find_by!(id: params[:job_id])
       if job.user_id == user.id
         event = Event.create!(event_params)
         render json: event, status: :created
