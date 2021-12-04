@@ -42,7 +42,7 @@ class JobsController < ApplicationController
       job = Job.find(params[:id])
       if job.user_id == current_user.id
         job.destroy
-        render json: "Job deleted."
+        head :no_content
       else
         render_not_logged_in # TODO: new error for unauthorized
       end
